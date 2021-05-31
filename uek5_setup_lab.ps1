@@ -6,7 +6,7 @@ $RouterImage = "Router.vhdx"
 
 function Write-Menu {
     param (
-        [string]$Title = 'UKE5'
+        [string]$Title = 'Title'
     )
     Clear-Host
     Write-Host "================ $Title ================"
@@ -180,7 +180,7 @@ function Stop-Lab {
 
 $continue = $true
 do {
-    Write-Menu
+    Write-Menu -Title UEK5
     Write-Host "Selektiere:"
     $KeyPress = [System.Console]::ReadKey($true)
     $key = $KeyPress.keyChar
