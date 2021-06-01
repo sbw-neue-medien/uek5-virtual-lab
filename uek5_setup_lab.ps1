@@ -11,47 +11,48 @@ function Write-Menu {
     Clear-Host
     Write-Host "================ $Title ================"
     
-    Write-Host "C: Create Lab"
+    Write-Host "C: [C]]reate Lab"
     Write-Host "1: Reset Router"
     Write-Host "2: Reset Server"
     Write-Host "3: Reset Client"
-    Write-Host "G: Start Lab"
-    Write-Host "v: Start HyperV Mgmt"
-    Write-Host "K: Kill Lab"
-    Write-Host "R: Remove Lab"
-    Write-Host "Q: Press 'Q' to quit."
+    Write-Host "G: Start Lab ([G]o)"
+    Write-Host "n: Verbinden (co[N]ect)"
+    Write-Host "v: Start Hyper[V] Mgmt"
+    Write-Host "K: [K]ill Lab"
+    Write-Host "R: [R]emove Lab"
+    Write-Host "Q: [Q]uit, Menu beenden"
 }
 
 function New-Lab {
-	if( !( Test-Path $LabLocation ) ) {
-		Write-Host "Ordner Struktur erstellen..."
-		New-Item -Path $LabLocation -ItemType Directory > $null
-	}
+    if ( !( Test-Path $LabLocation ) ) {
+        Write-Host "Ordner Struktur erstellen..."
+        New-Item -Path $LabLocation -ItemType Directory > $null
+    }
 
-	Write-Host "Netzwerk erstellen..."
-	New-LAN
-	New-Router
-	Write-Host "Netzwerk fertig und gestartet."
+    Write-Host "Netzwerk erstellen..."
+    New-LAN
+    New-Router
+    Write-Host "Netzwerk fertig und gestartet."
     Write-Beep -Count 1
 
     Write-Host "Server Image erstellen... (kann 10 Minuten daurn)"
-	New-Server
-	Write-Host "Server fertig und gestartet"
+    New-Server
+    Write-Host "Server fertig und gestartet"
     Write-Beep -Count 1
 	
-	Write-Host "Client erstellen..."
-	New-Client1
-	Write-Host "Client fertig, in HyperV console verbinden und von DVD starten."
-	Write-Beep -Count 2
+    Write-Host "Client erstellen..."
+    New-Client1
+    Write-Host "Client fertig, in HyperV console verbinden und von DVD starten."
+    Write-Beep -Count 2
 }
 
 function Remove-Lab {
-	Remove-Router
-	Remove-Client1
-	Remove-Server
-	Remove-LAN
+    Remove-Router
+    Remove-Client1
+    Remove-Server
+    Remove-LAN
 	
-	Remove-Item $LabLocation
+    Remove-Item $LabLocation
 }
 
 
@@ -60,76 +61,76 @@ function New-LAN {
 }
 
 function Remove-LAN {
-	Remove-VMSwitch -Name uek5LAN
+    Remove-VMSwitch -Name uek5LAN
 }
 
 function New-Router {
-	if( !(Test-Path $LabLocation\Router) ) {
-		New-Item -Path $LabLocation\Router -ItemType Directory > $null
-	}
-	# Create Router VM
+    if ( !(Test-Path $LabLocation\Router) ) {
+        New-Item -Path $LabLocation\Router -ItemType Directory > $null
+    }
+    # Create Router VM
     Copy-Item -Destination $LabLocation\Router -Path Images\$RouterImage
     Set-ItemProperty -Path $LabLocation\Router\Router.vhdx -Name IsReadOnly -Value $false
     $vm = New-VM -Name uek5Router -Path $LabLocation\Router -Generation 1 -MemoryStartupBytes 128MB -SwitchName "Default Switch" -BootDevice IDE -VHDPath $LabLocation\Router\Router.vhdx
-	Set-VM -VM $vm -CheckpointType ProductionOnly
-	Set-VM -VM $vm -AutomaticStartAction Nothing
+    Set-VM -VM $vm -CheckpointType ProductionOnly
+    Set-VM -VM $vm -AutomaticStartAction Nothing
 
     # Connect Router to LAN
     Add-VMNetworkAdapter -VM $vm -SwitchName uek5LAN
-	Start-VM $vm
+    Start-VM $vm
 }
 
 function Remove-Router {
-	$vm = Get-VM -VMName uek5Router
-	Stop-VM -VM $vm
-	Remove-VM -VM $vm
-	Remove-Item $LabLocation\Router -Force -Recurse
+    $vm = Get-VM -VMName uek5Router
+    Stop-VM -VM $vm
+    Remove-VM -VM $vm
+    Remove-Item $LabLocation\Router -Force -Recurse
 }
 
 function New-Client1 {
-	if( !( Test-Path $LabLocation\Client ) ) {
-		New-Item -Path $LabLocation\Client -ItemType Directory > $null
-	}
+    if ( !( Test-Path $LabLocation\Client ) ) {
+        New-Item -Path $LabLocation\Client -ItemType Directory > $null
+    }
 
-	# Create Client VM
+    # Create Client VM
     $vhd = New-VHD -Path $LabLocation\Client\Disk0.vhdx -Dynamic -SizeBytes 40GB
     $vm = New-VM -Name uek5Client1 -Path $LabLocation\Client -Generation 2 -Memory 2GB -SwitchName uek5LAN -BootDevice CD
- 	Set-VM -VM $vm -CheckpointType ProductionOnly
-	Set-VM -VM $vm -AutomaticStartAction Nothing
+    Set-VM -VM $vm -CheckpointType ProductionOnly
+    Set-VM -VM $vm -AutomaticStartAction Nothing
 
-	# Attach HD
-	Add-VMDisk -VM $vm -Path  $LabLocation\Client\Disk0.vhdx
+    # Attach HD
+    Add-VMDisk -VM $vm -Path  $LabLocation\Client\Disk0.vhdx
     Set-VMDvdDrive -VMName uek5Client1 -Path Images\$ClientImage
 	
-	# Connect Client to LAN
+    # Connect Client to LAN
     Get-VMNetworkAdapter -VM $vm | Connect-VMNetworkAdapter -SwitchName uek5LAN
 	
-	# Remove Network boot
-	$old_boot_order = Get-VMFirmware -VM $vm | Select-Object -ExpandProperty BootOrder
-	$new_boot_order = $old_boot_order | Where-Object { $_.BootType -ne "Network" }
-	Set-VMFirmware -VM $vm -BootOrder $new_boot_order
+    # Remove Network boot
+    $old_boot_order = Get-VMFirmware -VM $vm | Select-Object -ExpandProperty BootOrder
+    $new_boot_order = $old_boot_order | Where-Object { $_.BootType -ne "Network" }
+    Set-VMFirmware -VM $vm -BootOrder $new_boot_order
 
-	# Start-VM $vm In Console verbinden und manuel starten von DVD
+    # Start-VM $vm In Console verbinden und manuel starten von DVD
 }
 function Add-VMDisk {
-	param (
-		[Microsoft.HyperV.PowerShell.VirtualMachine]$VM,
-		[String]$Path,
-		[Int]$ControllerNumber=0
-	)
-	$contrl = Get-VMScsiController -VM $VM -ControllerNumber $ControllerNumber
-	Add-VMHardDiskDrive $contrl -Path $Path
+    param (
+        [Microsoft.HyperV.PowerShell.VirtualMachine]$VM,
+        [String]$Path,
+        [Int]$ControllerNumber = 0
+    )
+    $contrl = Get-VMScsiController -VM $VM -ControllerNumber $ControllerNumber
+    Add-VMHardDiskDrive $contrl -Path $Path
 }
 function Remove-Client1 {
-	Stop-VM -VMName uek5Client1
-	Remove-VM -VMName uek5Client1
-	Remove-Item $LabLocation\Client\* -Recurse -Force
+    Stop-VM -VMName uek5Client1
+    Remove-VM -VMName uek5Client1
+    Remove-Item $LabLocation\Client\* -Recurse -Force
 }
 
 function New-Server {
-	if( !( Test-Path $LabLocation\Server ) ) {
-		New-Item -Path $LabLocation\Server -ItemType Directory > $null
-	}
+    if ( !( Test-Path $LabLocation\Server ) ) {
+        New-Item -Path $LabLocation\Server -ItemType Directory > $null
+    }
 
     # Clone main disk
     $vhd = Mount-VHD -Path .\images\$ServerImage -ReadOnly -NoDriveLetter -Passthru
@@ -138,31 +139,31 @@ function New-Server {
 
     #Create server and connect it to our LAN
     $vm = New-VM -Name uek5Server -Path $LabLocation\Server -Generation 1 -MemoryStartupBytes 2GB -VHDPath $LabLocation\Server\Disk0.vhdx
-	Set-VM -VM $vm -CheckpointType ProductionOnly
-	Set-VM -VM $vm -AutomaticStartAction Nothing
+    Set-VM -VM $vm -CheckpointType ProductionOnly
+    Set-VM -VM $vm -AutomaticStartAction Nothing
 
 	
-	# Connect Server to LAN
+    # Connect Server to LAN
     Get-VMNetworkAdapter -VM $vm | Connect-VMNetworkAdapter -SwitchName uek5LAN
 
     Write-Host "Connect two data disks to be used as mirror"
     New-VHD -Dynamic -Path $LabLocation\Server\Disk1.vhdx -SizeBytes 300GB
     New-VHD -Dynamic -Path $LabLocation\Server\Disk2.vhdx -SizeBytes 300GB
-	Add-VMDisk -VM $vm -Path $LabLocation\Server\Disk1.vhdx
-	Add-VMDisk -VM $vm -Path $LabLocation\Server\Disk2.vhdx
+    Add-VMDisk -VM $vm -Path $LabLocation\Server\Disk1.vhdx
+    Add-VMDisk -VM $vm -Path $LabLocation\Server\Disk2.vhdx
 
-	Start-VM $vm 
+    Start-VM $vm 
 }
 
 function Remove-Server {
-	Stop-VM -VMName uek5Server
-	Remove-VM -VMName uek5Server
-	Remove-Item -Path $LabLocation\Server\* -Recurse -Force
+    Stop-VM -VMName uek5Server
+    Remove-VM -VMName uek5Server
+    Remove-Item -Path $LabLocation\Server\* -Recurse -Force
 }
 
 function Write-Beep {
-    param ( [int]$Count=1 )
-    for($i=0; $i -lt $Count; $i++) { [console]::beep(2500,120) }
+    param ( [int]$Count = 1 )
+    for ($i = 0; $i -lt $Count; $i++) { [console]::beep(2500, 120) }
 }
 
 function Start-Lab {
@@ -185,26 +186,27 @@ do {
     $KeyPress = [System.Console]::ReadKey($true)
     $key = $KeyPress.keyChar
 
-    switch( $key ) {
+    switch ( $key ) {
         'c' {
             New-Lab
             Read-Host "Press Enter"
         }
         '1' {
-			Remove-Router
+            Remove-Router
             New-Router   
             Read-Host "Press Enter"
         }
         '2' {
-			Remove-Server
+            Remove-Server
             New-Server
             Read-Host "Press Enter"
         }
         '3' {
-			Remove-Client1
+            Remove-Client1
             New-Client1
             Read-Host "Press Enter"
         }
+        'n' { vmconnect.exe }
         'v' { &$Env:Windir\System32\virtmgmt.msc }
         'g' {
             Start-Lab
