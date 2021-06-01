@@ -19,14 +19,14 @@ The client is a windows 10 workstation installed from ISO als from the https://w
 
 # Configure
 ## Client
-Setup at least one client. This has at this stage no connection the the internet so use a local account. Copy Winbox from the host to the client's desktop for the next step
+Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox from the host to the client's desktop for the next step.
 
 ## Router
-As the router has no IP-Adress ootb use something like winbox to connect to the router on network(3), as opposed to transport(4) level. Than router should get an 
+As the router has no IP-address ootb use something like winbox to connect to the router on network(3) layer, as opposed to transport(4) layer. After this the router should get an 
 * IP address and
-* setup as proxy gateway (NAT).
+* Setup as proxy gateway (NAT).
 * Setup device name, and admin password.
-* Setup DNS to accept remote request and
+* Setup DNS to accept remote requests and
 * Setup firewall rules to allow forwarding to tcp protocoll (6) and DNS port(53) to whatever IP-address the router has on LAN
 
 ## Server
