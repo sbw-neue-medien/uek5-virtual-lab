@@ -5,10 +5,11 @@ A small Hyper-V based lab to
 * one or more clients
 
 ## LAN
-A private LAN switch is used to prevent network troubles with the host. The WAN is connected to the Default Switch wich will forward to the uplink. 
+A private LAN switch (uek5witch) is used to prevent network troubles with the host. The WAN is connected to the ''Default Switch'' wich will forward to the uplink. 
+
 ## Router
-As router a Mikrotik CHR (Cloud Hoster Router) can be used: https://mikrotik.com/download#chr
-The VM is connect to the two switches and normally should find out on which to configure WAN (the only one with a DHCP).
+As router a Mikrotik CHR (Cloud Hoster Router) is used: https://mikrotik.com/download#chr
+The VM is connect to the two switches and normally should find out on which to configure WAN (the one with a DHCP-server). The Router can be configured with the cli but we will use the WinBox interface.
 
 ## Server
 The Windows Server images (vhd) can be downloaded from https://www.microsoft.com/en-us/evalcenter/ Make sure to get the preinstalled VHD image; installation. Ths script will build vhdx with the VHD as source
@@ -29,7 +30,9 @@ As the router has no IP-address ootb use something like winbox to connect to the
 * IP address and
 * Setup as proxy gateway (NAT).
 * Setup device name, and admin password.
-* Setup DNS to accept remote requests and
+* Setup DNS to accept remote requests
+
+Optionally (appears not to be needed):
 * Setup firewall rules to allow forwarding to tcp protocoll (6) and DNS port(53) to whatever IP-address the router has on LAN
 
 ## Server
