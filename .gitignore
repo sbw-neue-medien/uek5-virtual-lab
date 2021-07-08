@@ -1,1 +1,2 @@
-/Images
+/Images/*
+!.add vhd images here
