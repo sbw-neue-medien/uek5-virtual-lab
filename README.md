@@ -15,9 +15,12 @@ The Windows Server images (vhd) can be downloaded from https://www.microsoft.com
 Two additional vh disks are added to simulation a RAID setup
 
 ## Client
-The client is a windows 10 workstation installed from ISO als from the https://www.microsoft.com/en-us/evalcenter/. On first boot make sure to tap a key to get the VM starting from DVD.
+The client is a windows 10 workstation installed from ISO also downloaded from the https://www.microsoft.com/en-us/evalcenter/. On first boot make sure to tap a key to get the VM starting from DVD.
 
 # Configure
+## Script
+In uek5_setup_labs.ps1 adapt the lines $ServerImage and $ClientImage to the proper image names downloaded.
+
 ## Client
 Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox (https://mikrotik.com/download) from the host to the client's desktop for the next step.
 
