@@ -19,7 +19,7 @@ The client is a windows 10 workstation installed from ISO als from the https://w
 
 # Configure
 ## Client
-Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox from the host to the client's desktop for the next step.
+Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox (https://mikrotik.com/download) from the host to the client's desktop for the next step.
 
 ## Router
 As the router has no IP-address ootb use something like winbox to connect to the router on network(3) layer, as opposed to transport(4) layer. After this the router should get an 
