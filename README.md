@@ -21,6 +21,7 @@ The client is a windows 10 workstation installed from ISO also downloaded from t
 # Configure
 ## Script
 In uek5_setup_labs.ps1 adapt the lines $ServerImage and $ClientImage to the proper image names downloaded. Inorder to execute unsigned scripts issue the following in an Administrator PowerShell
+
     Set-ExecutionPolicy RemoteSigned
 
 ## Client
