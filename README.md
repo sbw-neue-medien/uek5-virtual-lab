@@ -27,7 +27,7 @@ Set-ExecutionPolicy RemoteSigned
 Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox (https://mikrotik.com/download) from the host to the client's desktop for the next step.
 
 ## Router
-As the router has no IP-address ootb use something like winbox to connect to the router on network(3) layer, as opposed to transport(4) layer. After this the router should get an 
+As the router has no IP-address ootb use something like winbox https://mikrotik.com/download on a client or the server to connect to the router on network(3) layer, as opposed to transport(4) layer. After this the router should get an 
 * IP address and
 * Setup as proxy gateway (NAT).
 * Setup device name, and admin password.
