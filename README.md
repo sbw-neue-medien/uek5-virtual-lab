@@ -21,7 +21,7 @@ The client is a windows 10 workstation installed from ISO also downloaded from t
 # Configure
 ## Script
 In uek5_setup_labs.ps1 adapt the lines $ServerImage and $ClientImage to the proper image names downloaded. Inorder to execute unsigned scripts issue the following in an Administrator PowerShell
-Set-ExecutionPolicy RemoteSigned
+    Set-ExecutionPolicy RemoteSigned
 
 ## Client
 Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox (https://mikrotik.com/download) from the host to the client's desktop for the next step.
