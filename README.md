@@ -8,7 +8,7 @@ A small Hyper-V based lab to
 A private LAN switch (uek5witch) is used to prevent network troubles with the host. The WAN is connected to the ''Default Switch'' wich will forward to the uplink. 
 
 ## Router
-As router a Mikrotik CHR (Cloud Hoster Router) is used: https://mikrotik.com/download#chr
+As router a Mikrotik CHR (Cloud Hoster Router) is used: https://mikrotik.com/download#chr, under x86 the ISO-file.
 The VM is connect to the two switches and normally should find out on which to configure WAN (the one with a DHCP-server). The Router can be configured with the cli but we will use the WinBox interface.
 
 ## Server
