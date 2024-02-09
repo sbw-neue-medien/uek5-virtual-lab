@@ -12,6 +12,7 @@ function Write-Menu {
     Write-Host "================ $Title ================"
     
     Write-Host "C: [C]]reate Lab"
+    Write-Host "0: Create LAN"
     Write-Host "1: Reset Router"
     Write-Host "2: Reset Server"
     Write-Host "3: Reset Client"
@@ -192,6 +193,9 @@ do {
         'c' {
             New-Lab
             Read-Host "Press Enter"
+        }
+        '0' {
+            New-LAN
         }
         '1' {
             Remove-Router
