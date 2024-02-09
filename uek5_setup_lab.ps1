@@ -12,6 +12,7 @@ function Write-Menu {
     Write-Host "================ $Title ================"
     
     Write-Host "C: [C]]reate Lab"
+    Write-Host "0: Create LAN"
     Write-Host "1: Reset Router"
     Write-Host "2: Reset Server"
     Write-Host "3: Reset Client"
@@ -95,6 +96,8 @@ function New-Client1 {
     # Create Client VM
     $vhd = New-VHD -Path $LabLocation\Client\Disk0.vhdx -Dynamic -SizeBytes 40GB
     $vm = New-VM -Name uek5Client1 -Path $LabLocation\Client -Generation 2 -Memory 4GB -SwitchName uek5LAN -BootDevice CD
+    Enable-VMTPM -VM $vm
+    Set-VMProcessor -VM $vm -Count 2 
     Set-VM -VM $vm -CheckpointType ProductionOnly
     Set-VM -VM $vm -AutomaticStartAction Nothing
 
@@ -190,6 +193,9 @@ do {
         'c' {
             New-Lab
             Read-Host "Press Enter"
+        }
+        '0' {
+            New-LAN
         }
         '1' {
             Remove-Router
