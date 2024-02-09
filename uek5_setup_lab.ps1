@@ -69,7 +69,7 @@ function New-Router {
         New-Item -Path $LabLocation\Router -ItemType Directory > $null
     }
     # Create Router VM
-    Copy-Item -Destination $LabLocation\Router -Path Images\$RouterImage
+    Copy-Item -Destination $LabLocation\Router\Router.vhdx -Path Images\$RouterImage
     Set-ItemProperty -Path $LabLocation\Router\Router.vhdx -Name IsReadOnly -Value $false
     $vm = New-VM -Name uek5Router -Path $LabLocation\Router -Generation 1 -MemoryStartupBytes 128MB -SwitchName "Default Switch" -BootDevice IDE -VHDPath $LabLocation\Router\Router.vhdx
     Set-VM -VM $vm -CheckpointType ProductionOnly
