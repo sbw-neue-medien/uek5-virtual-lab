@@ -35,7 +35,7 @@ function New-Lab {
     Write-Host "Netzwerk fertig und gestartet."
     Write-Beep -Count 1
 
-    Write-Host "Server Image erstellen... (kann 10 Minuten daurn)"
+    Write-Host "Server Image erstellen... (kann einige Minuten daurn)"
     New-Server
     Write-Host "Server fertig und gestartet"
     Write-Beep -Count 1
@@ -94,7 +94,7 @@ function New-Client1 {
 
     # Create Client VM
     $vhd = New-VHD -Path $LabLocation\Client\Disk0.vhdx -Dynamic -SizeBytes 40GB
-    $vm = New-VM -Name uek5Client1 -Path $LabLocation\Client -Generation 2 -Memory 2GB -SwitchName uek5LAN -BootDevice CD
+    $vm = New-VM -Name uek5Client1 -Path $LabLocation\Client -Generation 2 -Memory 4GB -SwitchName uek5LAN -BootDevice CD
     Set-VM -VM $vm -CheckpointType ProductionOnly
     Set-VM -VM $vm -AutomaticStartAction Nothing
 
