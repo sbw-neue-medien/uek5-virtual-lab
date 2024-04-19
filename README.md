@@ -5,11 +5,11 @@ A small Hyper-V based lab to
 * one or more clients
 
 ## LAN
-A private LAN switch (uek5witch) is used to prevent network troubles with the host. The WAN is connected to the ''Default Switch'' wich will forward to the uplink. 
+A private LAN switch (uek5witch) is used to prevent network troubles with the host. The WAN on the router is connected to the ''Default Switch'' wich will forward to the uplink (Internet). 
 
 ## Router
 As router a Mikrotik CHR (Cloud Hoster Router) is used: https://mikrotik.com/download#chr, under x86 the ISO-file.
-The VM is connect to the two switches and normally should find out on which to configure WAN (the one with a DHCP-server). The Router can be configured with the cli but we will use the WinBox interface.
+The VM is connect to the two switches (LAN and WAN) and normally should find out on which to configure WAN (the one with a DHCP-server). The Router can be configured with the cli but we will use the much easier WinBox interface.
 
 ## Server
 The Windows Server images (vhd) can be downloaded from https://www.microsoft.com/en-us/evalcenter/ Make sure to get the preinstalled VHD image installation. Ths script will build vhdx with the VHD as source.
@@ -23,6 +23,8 @@ The client is a windows 10 workstation installed from ISO also downloaded from t
 In uek5_setup_labs.ps1 adapt the lines $ServerImage and $ClientImage to the proper image names downloaded. Inorder to execute unsigned scripts issue the following in an Administrator PowerShell
 
     Set-ExecutionPolicy RemoteSigned
+    
+Make sure to run the script as Administrator if the current user has not sufficient rights.
 
 ## Client
 Setup at least one client. This has at this stage no working connection to the internet so use a local account. Copy Winbox (https://mikrotik.com/download) from the host to the client's desktop for the next step.
