@@ -12,8 +12,8 @@ As router a Mikrotik CHR (Cloud Hoster Router) is used: https://mikrotik.com/dow
 The VM is connect to the two switches and normally should find out on which to configure WAN (the one with a DHCP-server). The Router can be configured with the cli but we will use the WinBox interface.
 
 ## Server
-The Windows Server images (vhd) can be downloaded from https://www.microsoft.com/en-us/evalcenter/ Make sure to get the preinstalled VHD image; installation. Ths script will build vhdx with the VHD as source
-Two additional vh disks are added to simulation a RAID setup
+The Windows Server images (vhd) can be downloaded from https://www.microsoft.com/en-us/evalcenter/ Make sure to get the preinstalled VHD image installation. Ths script will build vhdx with the VHD as source.
+Two additional vh disks are added to simulation a RAID1 setup
 
 ## Client
 The client is a windows 10 workstation installed from ISO also downloaded from the https://www.microsoft.com/en-us/evalcenter/. On first boot make sure to tap a key to get the VM starting from DVD.
